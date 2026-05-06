@@ -1,4 +1,4 @@
-201~200~# 📢 Notification System - Spring Boot
+# Notification System - Spring Boot
 
 ## 🧠 Overview
 
@@ -11,6 +11,26 @@ It implements a notification system capable of handling multiple notification ty
 - Java 17
 - Spring Boot
 - Maven
+- Kafka
+- Docker
+- Kubernetes
+
+---
+
+## Local Distributed-Systems Lab
+
+This project can run locally with Kafka so you can practice microservices and orchestration concepts before using cloud tools.
+
+- Docker Compose lab: app + Kafka + Kafka UI
+- Local Kubernetes lab: app Deployment + Kafka StatefulSet + Services + ConfigMap
+- Kafka UI: inspect the `notification-events` topic and messages
+
+Start with [docs/local-orchestration.md](docs/local-orchestration.md).
+
+Useful local URLs:
+
+- App: `http://localhost:8081/notifications/send`
+- Kafka UI: `http://localhost:8082`
 
 ---
 
@@ -88,7 +108,7 @@ cd notification-system-springboot
 
 ### 3. Open in browser
 
-http://localhost:8080/notifications/test
+http://localhost:8081/notifications/send
 
 
 ---
