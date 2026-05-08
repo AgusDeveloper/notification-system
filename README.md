@@ -35,6 +35,7 @@ Useful local URLs:
 
 - App: `http://localhost:8081/notifications/send`
 - Kafka UI: `http://localhost:8082`
+- Prometheus: `http://localhost:19090` when using the local CI/CD production simulation
 
 ---
 

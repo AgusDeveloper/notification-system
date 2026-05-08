@@ -81,4 +81,6 @@ jobs:
           cache: maven
 
       - name: Run local CI/CD simulation
-        run: ./scripts/local-cicd.sh --no-cache
+        run: |
+          ./scripts/local-ci.sh --no-cache
+          ./scripts/local-cd.sh

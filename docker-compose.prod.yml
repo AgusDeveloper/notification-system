@@ -25,3 +25,6 @@ services:
 
   kafka-ui:
     restart: unless-stopped
+
+  prometheus:
+    restart: unless-stopped

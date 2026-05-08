@@ -17,6 +17,7 @@ public class HomeController {
                         "sendNotifications", "/notifications/send",
                         "health", "/actuator/health",
                         "readiness", "/actuator/health/readiness",
+                        "prometheus", "/actuator/prometheus",
                         "bankUsers", "/bank/users",
                         "bankLoans", "/bank/loans"
                 )

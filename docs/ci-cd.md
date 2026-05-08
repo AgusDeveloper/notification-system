@@ -32,6 +32,8 @@ This leaves the stack running so you can inspect it:
 - App: `http://localhost:18081`
 - Send notifications: `http://localhost:18081/notifications/send`
 - Readiness: `http://localhost:18081/actuator/health/readiness`
+- Prometheus metrics: `http://localhost:18081/actuator/prometheus`
+- Prometheus UI: `http://localhost:19090`
 - Kafka UI: `http://localhost:18082`
 
 Stop it with:
@@ -40,16 +42,100 @@ Stop it with:
 ./scripts/local-down.sh
 ```
 
-If you only want to validate CI and build the image:
+## Run CI Separately
+
+Use CI when you want to validate the code and create the deployable Docker image:
+
+```bash
+./scripts/local-ci.sh
+```
+
+This runs:
+
+- `./mvnw --batch-mode clean verify`
+- `docker build --tag notification-system:local .`
+
+Force a clean Docker image rebuild:
+
+```bash
+./scripts/local-ci.sh --no-cache
+```
+
+The older shortcut still works:
 
 ```bash
 ./scripts/local-cicd.sh --skip-deploy
 ```
 
-If you want to force a clean Docker image rebuild:
+## Run CD Separately
+
+Use CD after CI has already built `notification-system:local`:
 
 ```bash
-./scripts/local-cicd.sh --no-cache
+./scripts/local-cd.sh
+```
+
+This runs:
+
+- Confirms the Docker image exists
+- Deploys the production-like Docker Compose stack
+- Waits for `/actuator/health/readiness`
+- Calls `/notifications/send` as a smoke test
+
+If you want to redeploy without first stopping the existing Compose stack:
+
+```bash
+./scripts/local-cd.sh --keep-existing
+```
+
+## Validate Prometheus
+
+After running CD, verify that the application exposes Prometheus metrics:
+
+```bash
+curl http://localhost:18081/actuator/prometheus
+```
+
+You should see text metrics such as:
+
+```text
+http_server_requests_seconds_count
+jvm_memory_used_bytes
+process_uptime_seconds
+```
+
+Open the Prometheus UI:
+
+```text
+http://localhost:19090
+```
+
+Check the target:
+
+```text
+Status -> Target health
+```
+
+The `notification-system` target should be `UP`.
+
+Useful PromQL queries:
+
+```promql
+up{job="notification-system"}
+```
+
+```promql
+http_server_requests_seconds_count
+```
+
+```promql
+jvm_memory_used_bytes
+```
+
+Generate traffic, then query again:
+
+```bash
+curl http://localhost:18081/notifications/send
 ```
 
 ## GitHub Actions
@@ -62,7 +148,7 @@ It runs on:
 - Pushes to `main` or `master`
 - Manual `workflow_dispatch`
 
-Pull requests run CI and Docker packaging. Pushes also run the local production contract job, which exercises the same local pipeline path used by `./scripts/local-cicd.sh`.
+Pull requests run CI and Docker packaging. Pushes also run the local production contract job, which exercises the same local pipeline path used by `./scripts/local-ci.sh` and `./scripts/local-cd.sh`.
 
 ## Production-Like Compose Override
 
@@ -81,9 +167,10 @@ The simulation uses separate host ports so it can run beside your normal develop
 - Kafka UI: `18082`
 - MySQL: `13306`
 - Kafka: `19092`
+- Prometheus: `19090`
 
 Override any of them when needed:
 
 ```bash
-APP_PORT=8081 KAFKA_UI_PORT=8082 ./scripts/local-cicd.sh
+APP_PORT=8081 KAFKA_UI_PORT=8082 PROMETHEUS_PORT=9090 ./scripts/local-cicd.sh
 ```
