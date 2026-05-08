@@ -27,6 +27,8 @@ This project can run locally with Kafka so you can practice microservices and or
 
 Start with [docs/local-orchestration.md](docs/local-orchestration.md).
 
+For the banking loan CRUD flow, use [docs/banking-loan-use-case.md](docs/banking-loan-use-case.md).
+
 Useful local URLs:
 
 - App: `http://localhost:8081/notifications/send`

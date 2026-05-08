@@ -10,6 +10,7 @@ The Kafka container uses `bitnamilegacy/kafka:3.9.0` because the old `bitnami/ka
 - Docker Compose: runs several containers together on one machine.
 - Kubernetes: schedules containers and keeps the desired state running.
 - Kafka: stores event streams. Your app publishes `NotificationSentEvent` messages to the `notification-events` topic.
+- MySQL: stores current banking state such as users and loan applications.
 - Service discovery: containers and pods call each other by stable service names like `kafka:9092`.
 
 ## Level 1: Run Only Kafka Locally
@@ -40,7 +41,7 @@ http://localhost:8082
 
 Look for the `notification-events` topic and inspect its messages.
 
-## Level 2: Run App + Kafka With Docker Compose
+## Level 2: Run App + MySQL + Kafka With Docker Compose
 
 Build the jar first because the Dockerfile copies `target/*.jar`.
 
@@ -59,6 +60,12 @@ In this mode the app container talks to Kafka using the Compose service name:
 
 ```text
 KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+```
+
+It also talks to MySQL using:
+
+```text
+SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notification_system
 ```
 
 ## Level 3: Run App + Kafka In Local Kubernetes
@@ -123,3 +130,17 @@ curl http://localhost:8081/notifications/send
 - Use Docker Compose when learning service collaboration on one machine.
 - Use Kubernetes when learning production-style orchestration concepts.
 - Use managed cloud services later when you want reliability, scaling, IAM, networking, and operations practice.
+
+## Optional: DynamoDB Local
+
+The Compose file also includes DynamoDB Local behind a profile. It is not connected to the Spring Boot app yet; use it when you want to practice key-value/document modeling separately.
+
+```bash
+docker compose --profile dynamodb up dynamodb-local
+```
+
+Local endpoint:
+
+```text
+http://localhost:8000
+```
