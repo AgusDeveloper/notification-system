@@ -1,0 +1,27 @@
+services:
+  mysql:
+    restart: unless-stopped
+
+  kafka:
+    restart: unless-stopped
+
+  notification-system:
+    image: ${APP_IMAGE:-notification-system}:${APP_TAG:-local}
+    build: null
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      NOTIFICATION_KAFKA_TOPIC: notification-events
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_system
+      SPRING_DATASOURCE_USERNAME: notification_user
+      SPRING_DATASOURCE_PASSWORD: notification_password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8081/actuator/health/readiness >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  kafka-ui:
+    restart: unless-stopped

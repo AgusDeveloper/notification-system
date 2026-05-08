@@ -29,6 +29,8 @@ Start with [docs/local-orchestration.md](docs/local-orchestration.md).
 
 For the banking loan CRUD flow, use [docs/banking-loan-use-case.md](docs/banking-loan-use-case.md).
 
+For CI/CD and local production simulation, use [docs/ci-cd.md](docs/ci-cd.md).
+
 Useful local URLs:
 
 - App: `http://localhost:8081/notifications/send`
