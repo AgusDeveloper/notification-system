@@ -6,3 +6,6 @@ metadata:
 data:
   KAFKA_BOOTSTRAP_SERVERS: kafka:9092
   NOTIFICATION_KAFKA_TOPIC: notification-events
+  SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notification_system
+  SPRING_DATASOURCE_USERNAME: notification_user
+  SPRING_DATASOURCE_PASSWORD: notification_password

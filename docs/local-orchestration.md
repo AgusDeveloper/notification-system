@@ -68,7 +68,7 @@ It also talks to MySQL using:
 SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/notification_system
 ```
 
-## Level 3: Run App + Kafka In Local Kubernetes
+## Level 3: Run App + MySQL + Kafka In Local Kubernetes
 
 This works with Docker Desktop Kubernetes or Minikube.
 
@@ -89,6 +89,7 @@ Apply the manifests:
 
 ```bash
 kubectl apply -f k8s/namespace.yaml
+kubectl apply -f k8s/mysql.yaml
 kubectl apply -f k8s/kafka.yaml
 kubectl apply -f k8s/configmap.yaml
 kubectl apply -f k8s/deployment.yaml
